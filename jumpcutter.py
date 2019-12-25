@@ -29,7 +29,7 @@ def copyFrame(inputFrame,outputFrame):
     if not os.path.isfile(src):
         return False
     copyfile(src, dst)
-    if outputFrame%20 == 19:
+    if outputFrame%500 == 499:
         print(str(outputFrame+1)+" time-altered frames saved.")
     return True
 
@@ -197,8 +197,6 @@ for endGap in range(outputFrame,audioFrameCount):
     copyFrame(int(audioSampleCount/samplesPerFrame)-1,endGap)
 '''
 
-command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -strict -2 "+OUTPUT_FILE
+command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -threads 0 -strict -2 "+OUTPUT_FILE
 subprocess.call(command, shell=True)
-
-deletePath(TEMP_FOLDER)
 
