@@ -197,6 +197,6 @@ for endGap in range(outputFrame,audioFrameCount):
     copyFrame(int(audioSampleCount/samplesPerFrame)-1,endGap)
 '''
 
-command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -threads 0 -strict -2 "+OUTPUT_FILE
+command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -c:v h264_nvenc -rc:v vbr_hq -cq:v 25 -b:v 2500k -maxrate:v 5000k -profile:v high -threads 0 -strict -2 "+OUTPUT_FILE
 subprocess.call(command, shell=True)
 
