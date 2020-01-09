@@ -92,14 +92,14 @@ AUDIO_FADE_ENVELOPE_SIZE = 400 # smooth out transitiion's audio by quickly fadin
     
 createPath(TEMP_FOLDER)
 
-command = "ffmpeg -i "+INPUT_FILE+" -qscale:v "+str(FRAME_QUALITY)+" "+TEMP_FOLDER+"/frame%06d.jpg -hide_banner"
+command = "ffmpeg -i "+INPUT_FILE+" -threads 0 -qscale:v "+str(FRAME_QUALITY)+"  "+TEMP_FOLDER+"/frame%06d.jpg -hide_banner"
 subprocess.call(command, shell=True)
 
-command = "ffmpeg -i "+INPUT_FILE+" -ab 160k -ac 2 -ar "+str(SAMPLE_RATE)+" -vn "+TEMP_FOLDER+"/audio.wav"
+command = "ffmpeg -i "+INPUT_FILE+" -ab 160k -ac 2 -threads 0 -ar "+str(SAMPLE_RATE)+" -vn "+TEMP_FOLDER+"/audio.wav"
 
 subprocess.call(command, shell=True)
 
-command = "ffmpeg -i "+TEMP_FOLDER+"/input.mp4 2>&1"
+command = "ffmpeg -i -threads 0 "+TEMP_FOLDER+"/input.mp4 2>&1"
 f = open(TEMP_FOLDER+"/params.txt", "w")
 subprocess.call(command, shell=True, stdout=f)
 
@@ -197,6 +197,6 @@ for endGap in range(outputFrame,audioFrameCount):
     copyFrame(int(audioSampleCount/samplesPerFrame)-1,endGap)
 '''
 
-command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -c:v h264_nvenc -rc:v vbr_hq -cq:v 25 -b:v 2500k -maxrate:v 5000k -profile:v high -threads 0 -strict -2 "+OUTPUT_FILE
+command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -c:v h264_nvenc -rc:v vbr_hq -cq:v 35 -b:v 500k -maxrate:v 1000k -profile:v high -threads 0 -strict -2 "+OUTPUT_FILE
 subprocess.call(command, shell=True)
 
